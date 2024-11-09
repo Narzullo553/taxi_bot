@@ -1,0 +1,1 @@
+from . import Viloyat_tuman
