@@ -16,7 +16,7 @@ async def avtomobillar(msg: types.Message):
 @dp.message_handler(text="📑 🔎 Ariza bo'yicha qidish")
 async def qidish(msg: types.Message):
     malumot = await db.search_column(table='yolovchi', telegram_id=msg.from_user.id)
-    if malumot is not None:
+    if malumot:
         data = malumot[0]
         viloyatdan1 = data[0]
         tumandan1 = data[1]
@@ -121,7 +121,9 @@ async def habar_yuborish3(call: types.CallbackQuery, state: FSMContext):
             tumanga1 = malumot['tumanga']
             taxi = await db.search_column(table='taxsis', viloyatdan=viloyatdan1, viloyatga=viloyatga1,
                                           tumandan=tumandan1, tumanga=tumanga1)
+
             if taxi is not None:
+                print(taxi)
                 try:
                     text = ''
                     for data in taxi:

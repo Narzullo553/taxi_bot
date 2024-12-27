@@ -129,7 +129,8 @@ async def habar_yuborish31(call: types.CallbackQuery, state: FSMContext):
             tumanga1 = malumot['tumanga']
             taxi = await db.search_column(table='yolovchi', viloyatdan=viloyatdan1, viloyatga=viloyatga1,
                                           tumandan=tumandan1, tumanga=tumanga1)
-            if taxi is not None:
+            print(taxi)
+            if taxi:
                 try:
                     text = ''
                     for data in taxi:
@@ -149,6 +150,8 @@ async def habar_yuborish31(call: types.CallbackQuery, state: FSMContext):
                     await call.message.answer(text)
                 except:
                     await call.message.answer("malumotlar topilmadi")
+            else:
+                await call.message.answer("malumotlar topilmadi")
             await call.message.delete()
             await state.finish()
     except Exception as error:

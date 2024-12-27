@@ -1,6 +1,7 @@
 from . import help
 from . import start
 from . import ortga_qaytish_uchun
+from . import delete_malumot
 from . import Yolovchi_topish
 from . import admin_uchun
 from . import Taxi_topish

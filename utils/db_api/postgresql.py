@@ -1,4 +1,7 @@
+from idlelib.window import add_windows_to_menu
+
 import asyncpg
+from datetime import datetime
 from typing import Union
 from asyncpg import Connection
 from asyncpg.pool import Pool
@@ -81,6 +84,7 @@ class Database:
     async def add_taxi(self, viloyatdan: str, tumandan: str, viloyatga: str,
                        tumanga: str, mashina: str, tel_nomer: str,
                        yurish_vaqti: str, telegram_id: int):
+        yurish_vaqti = datetime.strptime(yurish_vaqti, "%H:%M").time()
         sql = ("INSERT INTO taxsis (viloyatdan, tumandan, viloyatga, tumanga, mashina,"
                " tel_nomer, yurish_vaqti, telegram_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)")
         return await self.execute(sql, viloyatdan, tumandan, viloyatga, tumanga,
@@ -88,6 +92,7 @@ class Database:
     async def add_yolovchi(self, viloyatdan: str, tumandan: str, viloyatga: str,
                        tumanga: str, tel_nomer: str,
                        yurish_vaqti: str, telegram_id: int):
+        yurish_vaqti = datetime.strptime(yurish_vaqti, "%H:%M").time()
         sql = ("INSERT INTO yolovchi (viloyatdan, tumandan, viloyatga, tumanga, tel_nomer,"
                " yurish_vaqti, telegram_id) VALUES ($1, $2, $3, $4, $5, $6, $7)")
         return await self.execute(sql, viloyatdan, tumandan, viloyatga, tumanga,
@@ -123,3 +128,10 @@ class Database:
         DROP TABLE IF EXISTS {teble}
         """
         return await self.execute(sql, execute=True)
+    async def clear_time_taxi(self):
+        sql = "DELETE FROM taxsis WHERE yurish_vaqti < CURRENT_TIME"
+        return await self.execute(sql, execute=True)
+    async def clear_time_yolovchi(self):
+        sql = "DELETE FROM yolovchi WHERE yurish_vaqti < CURRENT_TIME"
+        return await self.execute(sql, execute=True)
+
